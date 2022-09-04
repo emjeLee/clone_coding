@@ -1,10 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
-const DiaryEditor = ({ onCreate }) => {
-    useEffect(() => {
-        console.log("DiaryEditor 랜더");
-    });
-
+const DiaryEditor = React.memo(({ onCreate }) => {
     const authorInput = useRef();
     const contentInput = useRef();
 
@@ -47,17 +43,21 @@ const DiaryEditor = ({ onCreate }) => {
             <div>
                 <input
                     ref={authorInput}
-                    name="author"
                     value={state.author}
                     onChange={handleChangeState}
+                    name="author"
+                    placeholder="작성자"
+                    type="text"
                 />
             </div>
             <div>
                 <textarea
                     ref={contentInput}
-                    name="content"
                     value={state.content}
                     onChange={handleChangeState}
+                    name="content"
+                    placeholder="일기"
+                    type="text"
                 />
             </div>
             <div>
@@ -79,6 +79,5 @@ const DiaryEditor = ({ onCreate }) => {
             </div>
         </div>
     );
-};
-
-export default React.memo(DiaryEditor);
+});
+export default DiaryEditor;
