@@ -9,10 +9,6 @@ const DiaryItem = ({
     emotion,
     created_date,
 }) => {
-    useEffect(() => {
-        console.log(`${id}번 일기아이템 렌더`);
-    });
-
     const localContentInput = useRef();
     const [localContent, setLocalContent] = useState(content);
     const [isEdit, setIsEdit] = useState(false);
