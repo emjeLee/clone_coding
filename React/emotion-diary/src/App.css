@@ -244,6 +244,12 @@ header button {
     padding: 20px;
 }
 
+.DiaryEditor .control_box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 /* EMOTION ITEM */
 
 .EmotionItem {
@@ -272,6 +278,10 @@ header button {
     background-color: #e2e2e2;
 }
 
+.EmotionItem_on_1 {
+    background-color: #64c964;
+    color: white;
+}
 .EmotionItem_on_2 {
     background-color: #9dd772;
     color: white;
