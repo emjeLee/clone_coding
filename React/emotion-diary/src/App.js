@@ -20,6 +20,7 @@ const reducer = (state, action) => {
         }
         case "REMOVE": {
             newState = state.filter((it) => it.id !== action.targetId);
+            break;
         }
         case "EDIT": {
             newState = state.map((it) =>
@@ -94,14 +95,14 @@ function App() {
     };
 
     // EDIT
-    const onEdit = (targetId, date, content, emotion) => {
+    const onEdit = (targetId, emotion, content, date) => {
         dispatch({
             type: "EDIT",
             data: {
                 id: targetId,
-                data: new Date(date).getTime(),
-                content,
                 emotion,
+                content,
+                date: new Date(date).getTime(),
             },
         });
     };
@@ -116,7 +117,7 @@ function App() {
                         <Routes>
                             <Route path="/" element={<Home />} />
                             <Route path="/new" element={<New />} />
-                            <Route path="/edit" element={<Edit />} />
+                            <Route path="/edit/:id" element={<Edit />} />
                             <Route path="/diary/:id" element={<Diary />} />
                         </Routes>
                     </div>
