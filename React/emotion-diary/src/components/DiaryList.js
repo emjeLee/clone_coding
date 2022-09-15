@@ -4,7 +4,7 @@ import MyButton from "./MyButton";
 import DiaryItem from "./DiaryItem";
 
 const sortOptionList = [
-    { value: "lastest", name: "최신순" },
+    { value: "latest", name: "최신순" },
     { value: "oldest", name: "오래된 순" },
 ];
 
@@ -31,7 +31,7 @@ const ControlMenu = React.memo(({ value, onChange, optionList }) => {
 });
 const DiaryList = ({ diaryList }) => {
     const navigate = useNavigate();
-    const [sortType, setSortType] = useState("lastest");
+    const [sortType, setSortType] = useState("latest");
     const [filter, setFilter] = useState("all");
 
     const getProcessedDiaryList = () => {
@@ -44,7 +44,7 @@ const DiaryList = ({ diaryList }) => {
         };
 
         const compare = (a, b) => {
-            if (sortType === "lastest") {
+            if (sortType === "latest") {
                 return parseInt(b.date) - parseInt(a.date);
             } else {
                 return parseInt(a.date) - parseInt(b.date);
