@@ -47,9 +47,13 @@ function App() {
             const diaryList = JSON.parse(localData).sort(
                 (a, b) => parseInt(b.id) - parseInt(a.id)
             );
-            dataId.current = parseInt(diaryList[0].id) + 1;
-
-            dispatch({ type: "INIT", data: diaryList });
+            
+            // 빈배열은 True이기 때문에 로직이 수행이 됨
+            // 일기가 없는데 0번째 id를 가져오려 하고있기 때문에 오류 발생 조건문을 추가 
+            if (diaryList.length >= 1) {
+                dataId.current = parseInt(diaryList[0].id) + 1;
+                dispatch({ type: "INIT", data: diaryList });
+            }
         }
     }, []);
 
