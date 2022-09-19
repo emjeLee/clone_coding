@@ -1,5 +1,5 @@
 # 사용자 입력 처리하는 방법
-## DiaryEditor 폼 만들기
+## DiaryEditor Component
 - 작성자
 - 일기 본문
 - 감정 점수
@@ -61,15 +61,8 @@ const handleChangeState = (e)=>{
 ```
 ---
 # useRef로 DOM 조작하기
-### focus()
-리액트에서 제공하는 것이기 때문에 ```import``` 해 주어야 한다.
-
-```authorInput``` 에는 **React.MutableRefObject** 가 저장된다.
-- MutableRefObject란? HTML의 **DOM요소를 접근** 할 수 있는 기능
-
-```useRef```로 생성한 레퍼런스 객체는 현재 가르키는 값을 **current** 라는 프로퍼티로 불러와 사용 할 수 있다.  
-
-즉, ```authorInput```은 'input' 태그의 레퍼런스이기 때문에 'current'가 'input'값이 되어 'focus'를 줄 수 있는것.
+### useRef()를 사용해 Ref객체를 만들어 이 객체를 선택하고 싶은 DOM의 ref값으로 설정 해준다.  
+- 리액트에서 제공하는 것이기 때문에 ```import``` 해 주어야 한다.
 ## InputFocus
 ```javascript
 const authorInput = useRef();
@@ -85,3 +78,12 @@ const handleSubmit= () => {
  // 작성자 폼
  <input ref={authorInput} name="author" value={state.author} onChange={handleChangeDiary} />
 ```
+
+useRef()함수의 반환값을 ```authorInput``` 이라는 상수에 담아준다.
+- ```authorInput``` 에는 **React.MutableRefObject** 가 저장된다.
+- MutableRefObject란? HTML의 **DOM요소를 접근** 할 수 있는 기능
+
+```input```에 레퍼런스로 ```authorInput```을 전달 해 줌으로써 authorInput이라는 레퍼런스 객체를 통해 input태그에 접근 할 수 있게 된다.
+```useRef```로 생성한 레퍼런스 객체는 현재 가르키는 값을 **.current** 프로퍼티로 불러와 DOM을 가르키게 되고 사용 할 수 있다.  
+
+즉, ```authorInput```은 'input' 태그의 레퍼런스이기 때문에 'current'가 'input'값이 되어 'focus'를 줄 수 있는것.
