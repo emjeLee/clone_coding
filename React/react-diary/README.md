@@ -82,7 +82,7 @@ const Counter = ({initialValue}) => {
     const [count, setCount] = useState(initialValue);
 };
 ```
-#### dafaultProps를 사용하면 전달받지못한 Props의 기본값을 설정하여 에러를 방지.
+#### defaultProps를 사용하면 전달받지못한 Props의 기본값을 설정하여 에러를 방지.
     Counter.defaultProps = {
       initialValue: 0,
     };
