@@ -35,10 +35,13 @@ DiaryList.defaultProps = {
 
 export default DiaryList;
 ```
+
 ### toLocaleDatesString()
-- ms를 사람이 알아보기 쉬운 숫자로 표기 해준다. 
+
+-   ms를 사람이 알아보기 쉬운 숫자로 표기 해준다.
 
 ## DiaryItem
+
 ```javascript
 // 전달하는 props를 다 받아온다.
 const DiaryItem = ({ id, author, content, emotion, created_date }) => {
