@@ -1,3 +1,6 @@
+- [DiaryEditor의 불필요한 렌더](#diaryeditor의-불필요한-렌더)   
+- [DiaryItem의 불필요한 렌더](#diaryitem의-불필요한-렌더)
+---
 # DiaryEditor의 불필요한 렌더
 
 `DiaryEditor`에서 useEffect를 사용하여 언제 렌더가 되는지 확인 해 보면 2번 실행된다는 결과를 얻을 수 있는데, 그 이유는 `App`에서 확인 할 수 있다.
@@ -228,4 +231,210 @@ const DiaryEditor = React.memo(({ onCreate }) => {
     );
 });
 export default DiaryEditor;
+```
+
+---
+
+# DiaryItem의 불필요한 렌더
+
+### 문제점
+
+일기 하나를 삭제 할 때마다 모든 일기들이 리 렌더 된다.
+
+### 해결방안
+
+`DiaryItem`을 React.memo로 묶어준다.  
+`DiaryItem`은 7가지의 prop을 받고 있는데, App컴포넌트로 받은 2개의 함수와 5개의 데이터로 이루어져 있다. 이 중 `content`만이 일기 아이템을 수정하고 변화 시킬 수 있다.  
+따라서 2개의 함수 `onEdit`, `onRemove`, `content`를 최적화 할 것이다.
+
+-   onEdit와 onRemove는 데이터 state가 변화하면 재 생성될 수 밖에 없기 때문에 App컴포넌트에서 최적화를 해 주어야 한다.
+
+`setData`에 전달되는 파라미터에 최신 `state`가 전달되고, 반환하는 값의 data를 사용해야 최신형 업데이트를 사용 할 수 있다.
+
+```javascript
+const onRemove = useCallback((targetId) => {
+    setData((data) => data.filter((it) => it.id !== targetId));
+}, []);
+
+const onEdit = useCallback((targetId, newContent) => {
+    setData((data) =>
+        data.map((it) =>
+            it.id === targetId ? { ...it, content: newContent } : it
+        )
+    );
+}, []);
+```
+
+## App.js
+
+```javascript
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import "./App.css";
+import DiaryEditor from "./DiaryEditor";
+import DiaryList from "./DiaryList";
+
+function App() {
+    const [data, setData] = useState([]);
+    const dataId = useRef(0);
+
+    const getData = async () => {
+        const res = await fetch(
+            "https://jsonplaceholder.typicode.com/comments"
+        ).then((res) => res.json());
+
+        const initData = res.slice(0, 20).map((it) => {
+            return {
+                author: it.email,
+                content: it.body,
+                emotion: Math.floor(Math.random() * 5) + 1,
+                created_date: new Date().getTime(),
+                id: dataId.current++,
+            };
+        });
+
+        setData(initData);
+    };
+
+    useEffect(() => {
+        getData();
+    }, []);
+
+    const onCreate = useCallback((author, content, emotion) => {
+        const created_date = new Date().getTime();
+
+        const newItem = {
+            author,
+            content,
+            emotion,
+            created_date,
+            id: dataId.current,
+        };
+        dataId.current += 1;
+        setData((data) => [newItem, ...data]);
+    }, []);
+
+    const onRemove = useCallback((targetId) => {
+        setData((data) => data.filter((it) => it.id !== targetId));
+    }, []);
+
+    const onEdit = useCallback((targetId, newContent) => {
+        setData((data) =>
+            data.map((it) =>
+                it.id === targetId ? { ...it, content: newContent } : it
+            )
+        );
+    }, []);
+
+    const getDiaryAnalysis = useMemo(() => {
+        const goodCount = data.filter((it) => it.emotion >= 3).length;
+        const badCount = data.length - goodCount;
+        const goodRatio = (goodCount / data.length) * 100;
+        return { goodCount, badCount, goodRatio };
+    }, [data.length]);
+
+    const { goodCount, badCount, goodRatio } = getDiaryAnalysis;
+
+    return (
+        <div className="App">
+            <DiaryEditor onCreate={onCreate} />
+            <div>전체 일기 : {data.length}</div>
+            <div>기분 좋은 일기 개수 : {goodCount}</div>
+            <div>기분 나쁜 일기 개수 : {badCount}</div>
+            <div>기분 좋은 일기 비율 : {goodRatio}</div>
+            <DiaryList onEdit={onEdit} onRemove={onRemove} diaryList={data} />
+        </div>
+    );
+}
+
+export default App;
+```
+
+## DairyItem.js
+
+```javascript
+import React, { useEffect, useRef, useState } from "react";
+
+const DiaryItem = ({
+    onEdit,
+    onRemove,
+    id,
+    author,
+    content,
+    emotion,
+    created_date,
+}) => {
+    useEffect(() => {
+        console.log(`${id}번 째 아이템 렌더!`);
+    });
+
+    const [isEdit, setIsEdit] = useState(false);
+    const toggleIsEdit = () => setIsEdit(!isEdit);
+    const [localContent, setLocalContent] = useState(content);
+    const localContentInput = useRef();
+
+    const handleRemove = () => {
+        if (window.confirm(`${id}번째 일기를 정말 삭제하시겠습니까?`)) {
+            onRemove(id);
+        }
+    };
+
+    const handleQuitEdit = () => {
+        setIsEdit(false);
+        setLocalContent(content);
+    };
+
+    const handleEdit = () => {
+        if (localContent.length < 5) {
+            localContentInput.current.focus();
+            return;
+        }
+
+        if (window.confirm(`${id}번 째 일기를 수정하시겠습니까?`)) {
+            onEdit(id, localContent);
+            toggleIsEdit();
+        }
+    };
+
+    return (
+        <div className="DiaryItem">
+            <div className="info">
+                <span>
+                    작성자 : {author} | 감정점수 : {emotion}
+                </span>
+                <br />
+                <span className="date">
+                    {new Date(created_date).toLocaleString()}
+                </span>
+            </div>
+
+            <div className="content">
+                {isEdit ? (
+                    <>
+                        <textarea
+                            ref={localContentInput}
+                            value={localContent}
+                            onChange={(e) => setLocalContent(e.target.value)}
+                        />
+                    </>
+                ) : (
+                    <>{content}</>
+                )}
+            </div>
+
+            {isEdit ? (
+                <>
+                    <button onClick={handleQuitEdit}>수정 취소</button>
+                    <button onClick={handleEdit}>수정 완료</button>
+                </>
+            ) : (
+                <>
+                    <button onClick={handleRemove}>삭제하기</button>
+                    <button onClick={toggleIsEdit}>수정하기</button>
+                </>
+            )}
+        </div>
+    );
+};
+
+export default React.memo(DiaryItem);
 ```
