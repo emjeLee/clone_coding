@@ -1,3 +1,15 @@
+# NOTE 목차
+- [React에서 사용자 입력 처리하기, useRef](/React/react-diary/NOTE/React%20%EC%82%AC%EC%9A%A9%EC%9E%90%20%EC%9E%85%EB%A0%A5%20%EC%B2%98%EB%A6%AC%20%EB%B0%8F%20useRef.md)
+- [React에서 배열 사용하기1](/React/react-diary/NOTE/React%EC%97%90%EC%84%9C%20%EB%B0%B0%EC%97%B4%20%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B01%20-%20%EB%A6%AC%EC%8A%A4%ED%8A%B8%20%EB%A0%8C%EB%8D%94%EB%A7%81.md)
+- [React에서 배열 사용하기2](/React/react-diary/NOTE/React%EC%97%90%EC%84%9C%20%EB%B0%B0%EC%97%B4%20%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B02-%20%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%B6%94%EA%B0%80.md)
+- [React에서 배열 사용하기3,4](/React/react-diary/NOTE/React%EC%97%90%EC%84%9C%20%EB%B0%B0%EC%97%B4%20%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B03%2C4-%20%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%82%AD%EC%A0%9C%2C%20%EC%88%98%EC%A0%95.md)
+- [React Lifecycle 제어하기 - useEffect](/React/react-diary/NOTE/useEffect%20-%20React%20Lifecycle%EC%A0%9C%EC%96%B4%ED%95%98%EA%B8%B0.md)
+- [최적화 1 - useMemo](/React/react-diary/NOTE/useMemo%20-%20%EC%B5%9C%EC%A0%81%ED%99%941.md)
+- [최적화 2 - React.memo](/React/react-diary/NOTE/%08React.memo%20-%20%EC%B5%9C%EC%A0%81%ED%99%942.md)
+- [최적화 3 - useCallback](/React/react-diary/NOTE/useCallback%20-%20%EC%B5%9C%EC%A0%81%ED%99%943.md)
+- [복잡한 상태 관리 로직 분리하기 - useReducer](/React/react-diary/NOTE/useReducer%20-%20%EB%B3%B5%EC%9E%A1%ED%95%9C%20%EC%83%81%ED%83%9C%20%EA%B4%80%EB%A6%AC%20%EB%A1%9C%EC%A7%81%20%EB%B6%84%EB%A6%AC%ED%95%98%EA%B8%B0.md)
+- [컴포넌트 트리에 데이터 공급하기 - Context](/React/react-diary/NOTE/Context%20-%20%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8%20%ED%8A%B8%EB%A6%AC%EC%97%90%20%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EA%B3%B5%EA%B8%89%ED%95%98%EA%B8%B0.md)
+---
 # 리액트 클론코딩
 [ 한입 크기로 잘라 먹는 리액트(React.js) : 기초부터 실전까지 ] 강의
 
