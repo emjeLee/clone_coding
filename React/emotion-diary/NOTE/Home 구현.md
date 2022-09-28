@@ -158,68 +158,83 @@ const diaryList = useContext(DiaryStateContext);
 
 DiaryList를 정렬 할 수 있는 기능
 
-## DiaryList.js
+## Filter에 따른 리스트 정렬
 
-### ControlMenu
-
--   value : select의 현재값
--   onChange : select의 값이 변경되었을 때 바꿀 기능의 함수
--   optionList : select안에 들어갈 옵션
+-   ControlMenu
+    -   value : select의 현재값
+    -   onChange : select의 값이 변경되었을 때 바꿀 기능의 함수
+    -   optionList : select안에 들어갈 옵션
 
 1. `onChange` 이벤트가 발생하면 `e.target.value`를 전달하여 prop으로받은 onChange를 실행
 2. controlMenu가 받는 `onChange`는 `setSortType`이다
     - 오래된 순을 선택하면 'oldest'가 되고 최신순을 선택하면 'latest'가 된다.
 
+### JSON.parse(JSON.stringify(diaryList))
+
+-   배열 -> JSON화시켜 문자열로 변경 -> 문자열을 `JSON.parse`를통해 다시 배열로 반환
+
+### filterCallback
+
+좋은감정 안좋은감정을 나누기 위해 조건문으로 거른 값만 반환 해준다.
+
 ```javascript
+const filterCallBack = (item) => {
+    if (filter === "good") {
+        return parseInt(item.emotion) <= 3;
+    } else {
+        return parseInt(item.emotion) > 3;
+    }
+};
+```
+
+### DiaryList.js
+
+```javascript
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import MyButton from "./MyButton";
+import DiaryItem from "./DiaryItem";
+
 const sortOptionList = [
     { value: "latest", name: "최신순" },
     { value: "oldest", name: "오래된 순" },
 ];
 
+const filterOptionList = [
+    { value: "all", name: "전부 다" },
+    { value: "good", name: "좋은 감정만" },
+    { value: "bad", name: "안 좋은 감정만" },
+];
+
 const ControlMenu = ({ value, onChange, optionList }) => {
-    return;
-    <select value={value} onChange={(e) => onChange(e.target.value)}>
-        {optionList.map((it, idx) => (
-            <option key={idx} value={it.value}>
-                {it.name}
-            </option>
-        ))}
-    </select>;
-};
-
-const DiaryList = ({ diaryList }) => {
-    const [sortType, setSortType] = userState("latest");
-
     return (
-        <div>
-            <controlMenu
-                value={sortType}
-                onChange={setSortType}
-                optionList={sortOptionList}
-            />
-            diaryList.map((it) => <div key={it.id}>{it.content}</div>);
-        </div>
+        <select
+            className="ControlMenu"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+        >
+            {optionList.map((it, idx) => (
+                <option key={idx} value={it.value}>
+                    {it.name}
+                </option>
+            ))}
+        </select>
     );
 };
-
-DiaryList.defaultProps = {
-    diaryList: [],
-};
-
-export default DiaryList;
-```
----
-## Filter에 따른 리스트 정렬
-### JSON.parse(JSON.stringify(diaryList))
-
--   배열 -> JSON화시켜 문자열로 변경 -> 문자열을 `JSON.parse`를통해 다시 배열로 반환
-
-`diaryList`가 아닌 `getProcessedDiaryList`의 결과값을 랜더
-```javascript
 const DiaryList = ({ diaryList }) => {
-    const [sortType, setSortType] = userState("latest");
+    const navigate = useNavigate();
+    const [sortType, setSortType] = useState("latest");
+    const [filter, setFilter] = useState("all");
 
     const getProcessedDiaryList = () => {
+        const filterCallBack = (item) => {
+            if (filter === "good") {
+                return parseInt(item.emotion) <= 3;
+            } else {
+                return parseInt(item.emotion) > 3;
+            }
+        };
+
         const compare = (a, b) => {
             if (sortType === "latest") {
                 return parseInt(b.date) - parseInt(a.date);
@@ -229,21 +244,50 @@ const DiaryList = ({ diaryList }) => {
         };
 
         const copyList = JSON.parse(JSON.stringify(diaryList));
-        const sortedList = copyList.sort(compare);
+
+        const filteredList =
+            filter === "all"
+                ? copyList
+                : copyList.filter((it) => filterCallBack(it));
+
+        const sortedList = filteredList.sort(compare);
         return sortedList;
     };
 
     return (
-        <div>
-            <controlMenu
-                value={sortType}
-                onChange={setSortType}
-                optionList={sortOptionList}
-            />
-            getProcessedDiaryList().map((it) => <div key={it.id}>
-                {it.content}
-            </div>);
+        <div className="DiaryList">
+            <div className="menu_wrapper">
+                <div className="left_col">
+                    <ControlMenu
+                        value={sortType}
+                        onChange={setSortType}
+                        optionList={sortOptionList}
+                    />
+                    <ControlMenu
+                        value={filter}
+                        onChange={setFilter}
+                        optionList={filterOptionList}
+                    />
+                </div>
+                <div className="right_col">
+                    <MyButton
+                        type={"positive"}
+                        text={"새 일기쓰기"}
+                        onClick={() => navigate("/new")}
+                    />
+                </div>
+            </div>
+
+            {getProcessedDiaryList().map((it) => (
+                <DiaryItem key={it.id} {...it} />
+            ))}
         </div>
     );
 };
+
+DiaryList.defaultProps = {
+    diaryList: [],
+};
+
+export default DiaryList;
 ```
