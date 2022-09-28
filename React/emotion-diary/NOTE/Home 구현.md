@@ -2,6 +2,7 @@
 
 -   [Header](#header)
 -   [DiaryList](#diarylist)
+-   [Filter](#filter)
 
 # Header
 
@@ -139,7 +140,7 @@ const diaryList = useContext(DiaryStateContext);
 
 -   Home컴포넌트에 자식데이터로 추가한다
     ```javascript
-    r return (
+    return (
         <div>
             <MyHeader
                 headText={headText}
@@ -150,3 +151,99 @@ const diaryList = useContext(DiaryStateContext);
         </div>
     );
     ```
+
+---
+
+# Filter
+
+DiaryList를 정렬 할 수 있는 기능
+
+## DiaryList.js
+
+### ControlMenu
+
+-   value : select의 현재값
+-   onChange : select의 값이 변경되었을 때 바꿀 기능의 함수
+-   optionList : select안에 들어갈 옵션
+
+1. `onChange` 이벤트가 발생하면 `e.target.value`를 전달하여 prop으로받은 onChange를 실행
+2. controlMenu가 받는 `onChange`는 `setSortType`이다
+    - 오래된 순을 선택하면 'oldest'가 되고 최신순을 선택하면 'latest'가 된다.
+
+```javascript
+const sortOptionList = [
+    { value: "latest", name: "최신순" },
+    { value: "oldest", name: "오래된 순" },
+];
+
+const ControlMenu = ({ value, onChange, optionList }) => {
+    return;
+    <select value={value} onChange={(e) => onChange(e.target.value)}>
+        {optionList.map((it, idx) => (
+            <option key={idx} value={it.value}>
+                {it.name}
+            </option>
+        ))}
+    </select>;
+};
+
+const DiaryList = ({ diaryList }) => {
+    const [sortType, setSortType] = userState("latest");
+
+    return (
+        <div>
+            <controlMenu
+                value={sortType}
+                onChange={setSortType}
+                optionList={sortOptionList}
+            />
+            diaryList.map((it) => <div key={it.id}>{it.content}</div>);
+        </div>
+    );
+};
+
+DiaryList.defaultProps = {
+    diaryList: [],
+};
+
+export default DiaryList;
+```
+---
+## Filter에 따른 리스트 정렬
+### JSON.parse(JSON.stringify(diaryList))
+
+-   배열 -> JSON화시켜 문자열로 변경 -> 문자열을 `JSON.parse`를통해 다시 배열로 반환
+
+`diaryList`가 아닌 `getProcessedDiaryList`의 결과값을 랜더
+```javascript
+const DiaryList = ({ diaryList }) => {
+    const [sortType, setSortType] = userState("latest");
+
+    const getProcessedDiaryList = () => {
+        const compare = (a, b) => {
+            if (sortType === "latest") {
+                return parseInt(b.date) - parseInt(a.date);
+            } else {
+                return parseInt(a.date) - parseInt(b.date);
+            }
+        };
+
+        const copyList = JSON.parse(JSON.stringify(diaryList));
+        const sortedList = copyList.sort(compare);
+        return sortedList;
+    };
+
+    return (
+        <div>
+            <controlMenu
+                value={sortType}
+                onChange={setSortType}
+                optionList={sortOptionList}
+            />
+            getProcessedDiaryList().map((it) => <div key={it.id}>
+                {it.content}
+            </div>);
+        </div>
+    );
+};
+```
