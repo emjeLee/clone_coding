@@ -2,7 +2,11 @@
 
 -   [Header](#header)
 -   [DiaryList](#diarylist)
--   [Filter](#filter)
+    -   [Filter](#filter)
+    -   [새 일기쓰기 버튼](#새-일기쓰기-버튼)
+    -   [DiaryList.js](#diarylistjs)
+-   [DiaryItem](#diaryitem)  
+    -[DiaryItem.js](#diaryitemjs)
 
 # Header
 
@@ -187,6 +191,18 @@ const filterCallBack = (item) => {
 };
 ```
 
+---
+
+# 새 일기쓰기 버튼
+
+`onClick`를 클릭하면 `/new`라는 url을 갖는 페이지로 이동해야한다.
+
+-   useNavigate사용
+
+CSS 스타일링을 위해 filter와 '새 일기쓰기' 버튼을 나누어준다.
+
+---
+
 ### DiaryList.js
 
 ```javascript
@@ -290,4 +306,80 @@ DiaryList.defaultProps = {
 };
 
 export default DiaryList;
+```
+
+---
+
+# DiaryItem
+
+DiaryItem을 랜더링
+
+```javascript
+{
+    getProcessedDiaryList().map((it) => (
+        // <div key={it.id}>{it.content} {it.emotion}</div>
+        <DiaryItem key={it.id} {...it} />
+    ));
+}
+```
+
+public파일의 주소가 된다.
+
+    Process.env.PUBLIC_URL
+
+### date
+
+현재 prop로 받는 `date`는 사람이 알아보기 힘든 ms로 되어있기때문에 변환작업이 필요하다.
+
+    const strDate = new Date(parseInt(date)).toLocaleDateString();
+
+이미지와 상세일기를 클릭하면 `상세페이지` '수정하기'를 클릭하면 `수정페이지`로 이동
+
+### DiaryItem.js
+
+```javascript
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import MyButton from "./MyButton";
+
+const DiaryItem = ({ id, emotion, content, date }) => {
+    const navigate = useNavigate();
+
+    const strDate = new Date(parseInt(date)).toLocaleDateString();
+
+    const goDetail = () => {
+        navigate(`/diary/${id}`);
+    };
+
+    const goEdit = () => {
+        navigate(`/edit/${id}`);
+    };
+
+    return (
+        <div className="DiaryItem">
+            <div
+                onClick={goDetail}
+                className={[
+                    "emotion_img_wrapper",
+                    `emotion_img_wrapper_${emotion}`,
+                ].join(" ")}
+            >
+                <img
+                    src={process.env.PUBLIC_URL + `asset/emotion${emotion}.png`}
+                />
+            </div>
+            <div onClick={goDetail} className="info_wrapper">
+                <div className="diary_date">{strDate}</div>
+                <div className="diary_content_preview">
+                    {content.slice(0, 25)}
+                </div>
+            </div>
+            <div className="btn_wrapper">
+                <MyButton text={"수정하기"} onClick={goEdit} />
+            </div>
+        </div>
+    );
+};
+
+export default React.memo(DiaryItem);
 ```
