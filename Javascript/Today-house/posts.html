@@ -6,8 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="./css/global-colors.css" />
         <link rel="stylesheet" href="./css/index.css" />
+        <link rel="stylesheet" href="./css/posts.css" />
         <link
-            href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;200;400;700;900&display=swap"
             rel="stylesheet"
             preload
         />
@@ -31,6 +32,7 @@
                         ></path>
                     </svg>
                 </div>
+
                 <div class="logo">
                     <svg
                         class="icon"
@@ -62,6 +64,7 @@
                         </g>
                     </svg>
                 </div>
+
                 <div class="cart">
                     <svg
                         class="icon"
@@ -84,93 +87,14 @@
             </div>
         </nav>
 
-        <div class="secondary-nav">
-            <ul class="nav-container">
-                <li class="nav-item active"><a href="#">스토어홈</a></li>
-                <li class="nav-item"><a href="#">베스트</a></li>
-                <li class="nav-item"><a href="#">오늘의딜</a></li>
-                <li class="nav-item new"><a href="#">방한템특가</a></li>
-                <li class="nav-item new"><a href="#">블프세일</a></li>
-                <li class="nav-item"><a href="#">지정일배송</a></li>
-                <li class="nav-item"><a href="#">프리미엄</a></li>
-                <li class="nav-item"><a href="#">기획전</a></li>
-            </ul>
+        <section class="posting-container"></section>
+        <div class="side-bar">
+            <a href="/Javascript/Today-house/index.html">HOME</a>
+            <a href="/Javascript/Today-house/posts.html">집들이</a>
+            <a href="/write.html">글작성</a>
         </div>
-
-        <section class="banner-container">
-            <img
-                src="https://image.ohou.se/i/bucketplace-v2-development/uploads/store/banners/store_home_banners/163730493914401758.jpg?gif=1&w=2560&q=100"
-                alt="겨울 필수 방한템 특가!"
-            />
-            <div class="indicators">
-                <button></button>
-            </div>
-        </section>
-
-        <section class="today-house-container">
-            <div class="today-house-header">
-                <h1 class="title">오늘의 스토리</h1>
-                <a class="more" href="/posts.html">더보기</a>
-            </div>
-            <div class="today-house-item-wrapper">
-                <div class="today-house-item">
-                    <img
-                        class="today-house-item-image"
-                        src="./images/house1.jpg"
-                        alt="오늘의 집들이 사진"
-                    />
-                    <h2>
-                        여행에서 영감받아 완성! 디자이너의 따뜻한 모던 하우스
-                    </h2>
-                </div>
-                <div class="today-house-item">
-                    <img
-                        class="today-house-item-image"
-                        src="./images/house2.jpg"
-                        alt="오늘의 집들이 사진"
-                    />
-                    <h2>24년 구축 아파트, 도화지 같은 집으로 리모델링하기</h2>
-                </div>
-                <div class="today-house-item">
-                    <img
-                        class="today-house-item-image"
-                        src="./images/house3.jpg"
-                        alt="오늘의 집들이 사진"
-                    />
-                    <h2>첫 독립이니까, 엔틱&프렌치 감성으로 채운 1.5룸</h2>
-                </div>
-                <div class="today-house-item">
-                    <img
-                        class="today-house-item-image"
-                        src="./images/house4.jpg"
-                        alt="오늘의 집들이 사진"
-                    />
-                    <h2>화사한 화이트톤 아파트에, 설레는 그린 트리🎄</h2>
-                </div>
-                <div class="today-house-item">
-                    <img
-                        class="today-house-item-image"
-                        src="./images/house5.jpg"
-                        alt="오늘의 집들이 사진"
-                    />
-                    <h2>소품 수집 만렙의 알록달록한, 취향과 감성의 공간</h2>
-                </div>
-                <div class="today-house-item">
-                    <img
-                        class="today-house-item-image"
-                        src="./images/house6.jpg"
-                        alt="오늘의 집들이 사진"
-                    />
-                    <h2>스타일링으로 따뜻한 신혼집이 된 오래된 아파트</h2>
-                </div>
-            </div>
-            <div class="side-bar">
-                <a href="/Javascript/Today-house/index.html">HOME</a>
-                <a href="/Javascript/Today-house/posts.html">집들이</a>
-                <a href="/write.html">글작성</a>
-            </div>
-            <div class="back-drop"></div>
-        </section>
+        <div class="back-drop"></div>
         <script src="./src/index.js" type="module"></script>
+        <script src="./src/posts.js" type="module"></script>
     </body>
 </html>
