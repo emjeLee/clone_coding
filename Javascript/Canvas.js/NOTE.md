@@ -155,7 +155,7 @@ color.addEventListener("change", onColorChange);
 <div
     class="color-option"
     style="background-color: #d326b1"
-    data-color="#d326b1c"
+    data-color="#d326b1"
 ></div>
 ```
 ```css
@@ -190,4 +190,39 @@ function onColorClick(e) {
     ctx.strokeStyle = colorValue;
     color.value = colorValue;
 }
+```
+---
+# 캔버스 전체 채우기 버튼
+```html
+// index.html
+<button id="mode-btn">Fill</button>
+```
+- 채울지 말지 상태를 정할 `isFilling` 상수
+    - true/false 에 따라 텍스트를 변경 해 준다.
+- 캔버스를 클릭했을 때 발생하는 `onCanvasClick`
+    - `isFilling`가 true일 때 실행한다.
+
+```javascript
+// app.js
+const modeBtn = document.getElementById("mode-btn");
+let isFilling = false;
+
+function onModeClick() {
+    if (isFilling) {
+        isFilling = false;
+        modeBtn.innerText = "Fill";
+    } else {
+        isFilling = true;
+        modeBtn.innerText = "Draw";
+    }
+}
+
+function onCanvasClick() {
+    if (isFilling) {
+        ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    }
+}
+
+canvas.addEventListener("click", onCanvasClick);
+modeBtn.addEventListener("click", onModeClick);
 ```
