@@ -47,6 +47,7 @@ fileInput.addEventListener("change", onFileChange);
 # 텍스트 그려내기
 
 ```html
+// index.html
 <input type="text" placeholder="Write and then double click" id="text" />
 ```
 
@@ -60,6 +61,7 @@ fileInput.addEventListener("change", onFileChange);
 -   텍스트가 존재 할 때만 작동하게 만든다.
 
 ```javascript
+// app.js
 const textInput = document.getElementById("text");
 
 function onDoubleCLick(e) {
@@ -74,4 +76,28 @@ function onDoubleCLick(e) {
 }
 
 canvas.addEventListener("dblclick", onDoubleCLick);
+```
+---
+# 저장하기
+```html
+// index.html
+<button id="save">Save image</button>
+```
+- Canvas 메서드 중 `toDataUrl()`는 이미지를 `URL`로 인코딩 해준다.
+- `a`태그로 링크를 만드는데 웹사이트가아닌 `이미지 URL`로 링크한다.
+    - a태그에 `download`속성을 사용하면 파일 다운로드를 작동시킨다.
+- `a.click()`를 통해 a태그를 클릭한다.
+```javascript
+// app.js
+const saveBtn = document.getElementById("save");
+
+function onSaveClick() {
+    const url = canvas.toDataURL();
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "myDrawing.png";
+    a.click();
+}
+
+saveBtn.addEventListener("click", onSaveClick);
 ```
