@@ -41,3 +41,37 @@ function onFileChange(e) {
 
 fileInput.addEventListener("change", onFileChange);
 ```
+
+---
+
+# 텍스트 그려내기
+
+```html
+<input type="text" placeholder="Write and then double click" id="text" />
+```
+
+-   `Canvas`가 더블클릭될 때마다 텍스트를 그려낼것이기 때문에 canvas에 이벤트리스너를 추가해준다.
+-   `textInput`에 들어온 값을 사용한다.
+-   `ctx.lineWidth`을 수정했기 때문에 텍스트 출력 후 선을 그으면 설정한 1사이즈의 크기로 그려지는 문제가 발생한다.
+    -   `ctx.save()` : ctx의 현재상태, 색상, 스타일 등 모든것을 저장
+    -   `ctx.restore()` : 이전에 저장한 상태로 돌아간다.
+        -   `save` 저장 -> 수정 -> `restore` 복구
+-   `font`는 size와 font-family 2개의 property를 갖는다
+-   텍스트가 존재 할 때만 작동하게 만든다.
+
+```javascript
+const textInput = document.getElementById("text");
+
+function onDoubleCLick(e) {
+    const text = textInput.value;
+    if (text !== "") {
+        ctx.save();
+        ctx.lineWidth = 1;
+        ctx.font = "50px serif";
+        ctx.fillText(text, e.offsetX, e.offsetY);
+        ctx.restore();
+    }
+}
+
+canvas.addEventListener("dblclick", onDoubleCLick);
+```
